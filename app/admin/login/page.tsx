@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -37,6 +38,8 @@ export default function LoginPage() {
                     </label>
                     <input
                     type="email"
+                    name="email"
+                    required
                     className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500"
                     />
                 </div>
@@ -47,6 +50,8 @@ export default function LoginPage() {
                     </label>
                     <input
                     type="password"
+                    name="password"
+                    required
                     className="mt-2 block w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500"
                     />
                 </div>
@@ -61,9 +66,9 @@ export default function LoginPage() {
 
                 <p className="mt-8 text-center text-sm text-gray-400">
                 Don&apos;t have an account?
-                <a className="ml-1 font-semibold text-indigo-400 hover:text-indigo-300">
+                <Link href="/admin/register" className="ml-1 font-semibold text-indigo-400 hover:text-indigo-300">
                     Sign up
-                </a>
+                </Link>
                 </p>
 
             </div>

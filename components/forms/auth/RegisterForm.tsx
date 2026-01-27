@@ -1,8 +1,8 @@
 "use client";
 
-import { registerAction } from "../register/actions";
+import { registerAction } from "../../../app/admin/(auth)/register/actions";
 import { useActionState } from "react";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../../../app/admin/(auth)/register/SubmitButton";
 
 const initialState = {
   errors: {},

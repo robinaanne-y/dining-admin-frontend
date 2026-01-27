@@ -18,6 +18,7 @@ export async function registerAction(
     if (password && password.length < 8) {
         errors.password = "Password must be at least 8 characters";
     }
+    if (!retypePassword) errors.retype_password = "Password is required";
     if (password !== retypePassword) {
         errors.retype_password = "Passwords do not match";
     }

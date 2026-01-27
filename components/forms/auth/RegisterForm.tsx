@@ -1,7 +1,8 @@
 "use client";
 
-import { registerAction } from "../register/actions";
+import { registerAction } from "../../../app/admin/(auth)/register/actions";
 import { useActionState } from "react";
+import SubmitButton from "../../../app/admin/(auth)/register/SubmitButton";
 
 const initialState = {
   errors: {},
@@ -35,67 +36,8 @@ export default function RegisterForm() {
             {state.errors?._form}
           </p>
         ) }
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Email address
-          </label>
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors.email
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
 
-          {state.errors.email && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors.email}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Password
-          </label>
-          <input
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors.password
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-          {state.errors.email && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors.email}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Re-type Password
-          </label>
-          <input
-            name="retype_password"
-            type="password"
-            autoComplete="retype-password"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors.retype_password
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-          {state.errors.email && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors.email}
-            </p>
-          )}
-        </div>
-
+        
         <div>
           <label className="block text-sm font-medium text-gray-200">
             Name
@@ -105,14 +47,14 @@ export default function RegisterForm() {
             type="text"
             autoComplete="name"
             className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors.name
+            state.errors?.name
               ? "outline-red-500"
               : "outline-white/10"}`}
           />
 
-          {state.errors.email && (
+          {state.errors?.name && (
             <p className="mt-1 text-sm text-red-400">
-              {state.errors.email}
+              {state.errors?.name}
             </p>
           )}
         </div>
@@ -126,14 +68,76 @@ export default function RegisterForm() {
             type="text"
             autoComplete="phone_number"
             className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors.phone_number
+            state.errors?.phone_number
               ? "outline-red-500"
               : "outline-white/10"}`}
           />
 
-          {state.errors.phone_number && (
+          {state.errors?.phone_number && (
             <p className="mt-1 text-sm text-red-400">
-              {state.errors.phone_number}
+              {state.errors?.phone_number}
+            </p>
+          )}
+        </div>
+
+
+        <div>
+          <label className="block text-sm font-medium text-gray-200">
+            Email address
+          </label>
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
+            state.errors?.email
+              ? "outline-red-500"
+              : "outline-white/10"}`}
+          />
+
+          {state.errors?.email && (
+            <p className="mt-1 text-sm text-red-400">
+              {state.errors?.email}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-200">
+            Password
+          </label>
+          <input
+            name="password"
+            type="password"
+            autoComplete="new-password"
+            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
+            state.errors?.password
+              ? "outline-red-500"
+              : "outline-white/10"}`}
+          />
+          {state.errors?.password && (
+            <p className="mt-1 text-sm text-red-400">
+              {state.errors?.password}
+            </p>
+          )}
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-200">
+            Re-type Password
+          </label>
+          <input
+            name="retype_password"
+            type="password"
+            autoComplete="retype-password"
+            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
+            state.errors?.retype_password
+              ? "outline-red-500"
+              : "outline-white/10"}`}
+          />
+          {state.errors?.retype_password && (
+            <p className="mt-1 text-sm text-red-400">
+              {state.errors?.retype_password}
             </p>
           )}
         </div>
@@ -149,12 +153,7 @@ export default function RegisterForm() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full rounded-md bg-indigo-500 py-2 font-semibold text-white hover:bg-indigo-400"
-        >
-          Create account
-        </button>
+        <SubmitButton />
 
         <p className="text-center text-sm text-gray-400">
           Already have an account?{" "}

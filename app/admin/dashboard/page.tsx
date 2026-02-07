@@ -1,6 +1,5 @@
 
 
-import logoutButton from './logoutButton';
 
 export default function DashboardPage() {
   return (

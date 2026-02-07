@@ -1,5 +1,5 @@
 // lib/constants/index.ts
-export const LOGIN_ROUTE = "/login";
+export const LOGIN_ROUTE = "/admin/login";
 export const DASHBOARD_ROUTE = "/admin/dashboard";
 
 // Expired session

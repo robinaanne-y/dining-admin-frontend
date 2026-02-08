@@ -3,10 +3,10 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link';
-import FormField from "@/components/ui/FormField";
+import FormField from "@/components/ui/formField";
 import SubmitFormButton from "@/components/shared/SubmitFormButton";
-import Form from "@/components/ui/Form";
-import Input from '@/components/ui/Input';
+import Form from "@/components/ui/form";
+import Input from '@/components/ui/input';
 import { DASHBOARD_ROUTE, LOGIN_ROUTE } from '@/constants';
 import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 

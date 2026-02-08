@@ -6,9 +6,9 @@ import Link from 'next/link';
 import SubmitFormButton from '@/components/shared/SubmitFormButton';
 
 import { DASHBOARD_ROUTE } from '@/constants';
-import FormField from '@/components/ui/FormField';
-import Input from '@/components/ui/Input';
-import Form from '@/components/ui/Form';
+import FormField from '@/components/ui/formField';
+import Input from '@/components/ui/input';
+import Form from '@/components/ui/form';
 import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 
 

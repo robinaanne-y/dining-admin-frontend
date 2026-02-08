@@ -9,6 +9,7 @@ import { DASHBOARD_ROUTE } from '@/constants';
 import FormField from '@/components/ui/formField';
 import Input from '@/components/ui/input';
 import Form from '@/components/ui/form';
+import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 
 
 const baseUrl= process.env.NEXT_PUBLIC_API_URL
@@ -31,10 +32,7 @@ export default function LoginForm() {
         const formData = new FormData(e.currentTarget)
 
         try {
-        // 1️⃣ CSRF cookie — MUST be from browser
-            await fetch(`${baseUrl}/sanctum/csrf-cookie`, {
-                credentials: 'include',
-            })
+            await getCsrfCookie()
 
             const xsrfToken = getCookie('XSRF-TOKEN')
 
@@ -140,13 +138,4 @@ export default function LoginForm() {
 
         </div>
     )
-}
-
-function getCookie(name: string) {
-    const value = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(name + '='))
-        ?.split('=')[1]
-
-    return value ? decodeURIComponent(value) : undefined
 }

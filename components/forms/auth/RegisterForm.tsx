@@ -8,7 +8,7 @@ import SubmitFormButton from "@/components/shared/SubmitFormButton";
 import Form from "@/components/ui/form";
 import Input from '@/components/ui/input';
 import { DASHBOARD_ROUTE, LOGIN_ROUTE } from '@/constants';
-import { getCsrfCookie } from '@/lib/sanctum';
+import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 
 
 const baseUrl= process.env.NEXT_PUBLIC_API_URL
@@ -159,13 +159,4 @@ export default function RegisterForm() {
       </p>
     </div>
   );
-}
-
-function getCookie(name: string) {
-    const value = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(name + '='))
-        ?.split('=')[1]
-
-    return value ? decodeURIComponent(value) : undefined
 }

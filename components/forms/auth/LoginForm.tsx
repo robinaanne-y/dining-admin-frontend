@@ -5,10 +5,11 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link';
 import SubmitFormButton from '@/components/shared/SubmitFormButton';
 
-import { DASHBOARD_ROUTE, LOGIN_ROUTE } from '@/constants';
+import { DASHBOARD_ROUTE } from '@/constants';
 import FormField from '@/components/ui/formField';
 import Input from '@/components/ui/input';
 import Form from '@/components/ui/form';
+import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 
 
 const baseUrl= process.env.NEXT_PUBLIC_API_URL
@@ -31,10 +32,7 @@ export default function LoginForm() {
         const formData = new FormData(e.currentTarget)
 
         try {
-        // 1️⃣ CSRF cookie — MUST be from browser
-            await fetch(`${baseUrl}/sanctum/csrf-cookie`, {
-                credentials: 'include',
-            })
+            await getCsrfCookie()
 
             const xsrfToken = getCookie('XSRF-TOKEN')
 
@@ -57,13 +55,19 @@ export default function LoginForm() {
                     password: data.errors?.password?.[0],
                     message: data.message,
                 })
-
+                
+                console.log(data)
                 setLoading(false)
                 return
             }
 
+            
+            console.log('Login successful')
             router.push(DASHBOARD_ROUTE)
-        } catch {
+        } catch (err) {
+            setError({
+                message: "An error occurred during login.",
+            })
         } finally {
             setLoading(false)
         }
@@ -75,7 +79,7 @@ export default function LoginForm() {
         <div className="flex h-screen w-screen">
 
             {/* LEFT: Login */}
-            <div className="flex w-full lg:w-1/2 items-center justify-center bg-gray-900 px-6">
+            <div className="flex w-full lg:w-1/2 items-center justify-center bg-slate-900 px-6">
                 <div className="w-full max-w-sm">
 
                     <img
@@ -84,7 +88,7 @@ export default function LoginForm() {
                     className="mx-auto h-10 w-auto"
                     />
 
-                    <h2 className="mt-10 text-center text-2xl font-bold text-white">
+                    <h2 className="text-center text-2xl font-bold text-slate-50 py-6">
                     Sign in to your account
                     </h2>
 
@@ -115,7 +119,7 @@ export default function LoginForm() {
 
                     <p className="mt-8 text-center text-sm text-gray-400">
                         Don&apos;t have an account?
-                        <Link href="/admin/register" className="ml-1 font-semibold text-indigo-400 hover:text-indigo-300">
+                        <Link href="/admin/register" className="ml-1 font-semibold text-slate-50 hover:text-indigo-300">
                             Sign up
                         </Link>
                     </p>
@@ -126,7 +130,7 @@ export default function LoginForm() {
             {/* RIGHT: Image */}
             <div className="hidden lg:block lg:w-1/2">
                 <img
-                    src="https://images.unsplash.com/photo-1506765515384-028b60a970df"
+                    src="/images/login_img.png"
                     alt="Login"
                     className="h-full w-full object-cover"
                 />
@@ -134,13 +138,4 @@ export default function LoginForm() {
 
         </div>
     )
-}
-
-function getCookie(name: string) {
-    const value = document.cookie
-        .split('; ')
-        .find(row => row.startsWith(name + '='))
-        ?.split('=')[1]
-
-    return value ? decodeURIComponent(value) : undefined
 }

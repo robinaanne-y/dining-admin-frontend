@@ -1,16 +1,78 @@
 "use client";
 
-import { registerAction } from "../../../app/admin/(auth)/register/actions";
-import { useActionState } from "react";
-import SubmitButton from "../../../app/admin/(auth)/register/SubmitButton";
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link';
+import FormField from "@/components/ui/formField";
+import SubmitFormButton from "@/components/shared/SubmitFormButton";
+import Form from "@/components/ui/form";
+import Input from '@/components/ui/input';
+import { DASHBOARD_ROUTE, LOGIN_ROUTE } from '@/constants';
+import { getCsrfCookie, getCookie } from '@/lib/sanctum';
 
-const initialState = {
-  errors: {},
-};
+
+const baseUrl= process.env.NEXT_PUBLIC_API_URL
 
 export default function RegisterForm() {
-  const [state, formAction] = useActionState(registerAction, initialState);
+  type FormErrors = {
+      email?: string;
+      password?: string;
+      password_confirmation?: string;
+      name?: string;
+      phone_number?: string;
+      user_type?: string;
+      message?: string;
+  };
 
+  const [error, setError] = useState<FormErrors | null>(null);
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setLoading(true)
+
+    const formData = new FormData(e.currentTarget)
+
+    try {
+
+      await getCsrfCookie()
+      const xsrfToken = getCookie('XSRF-TOKEN')
+      const res = await fetch(`${baseUrl}/register`, {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+          headers: {
+            'X-XSRF-TOKEN': xsrfToken || '',
+            'Accept': 'application/json',
+          },
+      })
+
+      if (!res.ok) {
+          const data = await res.json()
+
+          setError({
+              email: data.errors?.email?.[0],
+              password: data.errors?.password?.[0],
+              password_confirmation: data.errors?.password_confirmation?.[0],
+              name: data.errors?.name?.[0],
+              phone_number: data.errors?.phone_number?.[0],
+              message: data.message,
+          })
+
+          setLoading(false)
+          return
+      }
+
+      router.push(DASHBOARD_ROUTE)
+    } catch (err) {
+      setError({
+        message: "An error occurred during registration.",
+      })
+    } finally {
+        setLoading(false)
+    }
+}
   return (
     <div className="w-full max-w-md px-6">
       {/* Logo / Heading */}
@@ -29,139 +91,72 @@ export default function RegisterForm() {
       </div>
 
       {/* Form */}
-      <form action={formAction} className="mt-8 space-y-6">
+      <Form onSubmit={handleSubmit}>
+        <FormField label="Email" error={error?.email}>
+            <Input
+                name="email"
+                type="email"
+                state={error?.email ? "error" : "default"}
+            />
+        </FormField>
 
-        {"_form" in (state.errors ?? {}) && (
-          <p className="text-sm text-red-400">
-            {state.errors?._form}
-          </p>
-        ) }
 
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Name
-          </label>
-          <input
-            name="name"
-            type="text"
-            autoComplete="name"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors?.name
-              ? "outline-red-500"
-              : "outline-white/10"}`}
+        <FormField label="Password" error={error?.password}>
+            <Input
+                name="password"
+                type="password"
+                state={error?.password ? "error" : "default"}
+            />
+        </FormField>
+
+        <FormField label="Confirm Password" error={error?.password_confirmation}>
+            <Input
+                name="password_confirmation"
+                type="password"
+                state={error?.password_confirmation ? "error" : "default"}
+            />
+        </FormField>
+
+        <FormField label="Name" error={error?.name}>
+            <Input
+                name="name"
+                type="text"
+                state={error?.name ? "error" : "default"}
+            />
+        </FormField>
+
+        <FormField label="Phone Number" error={error?.phone_number}>
+            <Input
+                name="phone_number"
+                type="text"
+                state={error?.phone_number ? "error" : "default"}
+            />
+        </FormField>
+
+        <FormField label="User Type" error={error?.user_type}>
+            <Input
+                name="user_type"
+                type="hidden"
+                value="owner"
+                state={error?.user_type ? "error" : "default"}
+            />
+        </FormField>
+
+
+        <SubmitFormButton 
+              isLoading={loading} 
+              label="Sign up"
+              loadingLabel="Signing up..."
           />
+      </Form>
 
-          {state.errors?.name && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors?.name}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Phone Number
-          </label>
-          <input
-            name="phone_number"
-            type="text"
-            autoComplete="phone_number"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors?.phone_number
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-
-          {state.errors?.phone_number && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors?.phone_number}
-            </p>
-          )}
-        </div>
-
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Email address
-          </label>
-          <input
-            name="email"
-            type="email"
-            autoComplete="email"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors?.email
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-
-          {state.errors?.email && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors?.email}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Password
-          </label>
-          <input
-            name="password"
-            type="password"
-            autoComplete="new-password"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors?.password
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-          {state.errors?.password && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors?.password}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-200">
-            Re-type Password
-          </label>
-          <input
-            name="retype_password"
-            type="password"
-            autoComplete="retype-password"
-            className={`mt-1 w-full rounded-md bg-white/5 px-3 py-2 text-white outline outline-1 outline-white/10 focus:outline-indigo-500 ${
-            state.errors?.retype_password
-              ? "outline-red-500"
-              : "outline-white/10"}`}
-          />
-          {state.errors?.retype_password && (
-            <p className="mt-1 text-sm text-red-400">
-              {state.errors?.retype_password}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <input
-            name="user_type"
-            type="text"
-            autoComplete="user_type"
-            value="owner"
-            readOnly
-            hidden
-          />
-        </div>
-
-        <SubmitButton />
-
-        <p className="text-center text-sm text-gray-400">
-          Already have an account?{" "}
-          <a href="/admin/login" className="text-indigo-400 hover:text-indigo-300">
-            Sign in
-          </a>
-        </p>
-      </form>
+      {/* Footer */}
+      <p className="mt-6 text-center text-sm text-gray-400">
+        Already have an account?{" "}
+        <Link href={LOGIN_ROUTE} className="text-blue-400 hover:text-blue-300">
+          Sign in
+        </Link>
+      </p>
     </div>
   );
 }

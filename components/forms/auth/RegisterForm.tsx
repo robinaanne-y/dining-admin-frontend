@@ -18,6 +18,7 @@ export default function RegisterForm() {
       email?: string;
       password?: string;
       password_confirmation?: string;
+      restaurant_name?: string;
       name?: string;
       phone_number?: string;
       user_type?: string;
@@ -57,6 +58,7 @@ export default function RegisterForm() {
               password_confirmation: data.errors?.password_confirmation?.[0],
               name: data.errors?.name?.[0],
               phone_number: data.errors?.phone_number?.[0],
+              restaurant_name: data.errors?.restaurant_name?.[0],
               message: data.message,
           })
 
@@ -117,7 +119,15 @@ export default function RegisterForm() {
             />
         </FormField>
 
-        <FormField label="Name" error={error?.name}>
+        <FormField label="Restaurant Name" error={error?.restaurant_name}>
+            <Input
+                name="restaurant_name"
+                type="text"
+                state={error?.restaurant_name ? "error" : "default"}
+            />
+        </FormField>
+
+        <FormField label="Owner Name" error={error?.name}>
             <Input
                 name="name"
                 type="text"
@@ -133,7 +143,7 @@ export default function RegisterForm() {
             />
         </FormField>
 
-        <FormField label="User Type" error={error?.user_type}>
+        <FormField error={error?.user_type}>
             <Input
                 name="user_type"
                 type="hidden"
